@@ -11,7 +11,11 @@ mongoose.connect("mongodb://localhost:27017/practiceNodejs");
 var indexRouter = require("./routes/index");
 var cutomersRouter = require("./routes/customers");
 var productsRouter = require("./routes/products");
-
+var categoriesRouter = require("./routes/categories");
+var suppliersRouter = require("./routes/suppliers");
+var employeesRouter = require("./routes/employees");
+var ordersRouter = require("./routes/orders");
+var orderDetailsRouter = require("./routes/orderDetails");
 var app = express();
 
 // view engine setup
@@ -28,6 +32,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/customers", cutomersRouter);
 app.use("/products", productsRouter);
+app.use("/categories", categoriesRouter);
+app.use("/suppliers", suppliersRouter);
+app.use("/employees", employeesRouter);
+app.use("/orders", ordersRouter);
+app.use("/orderDetails", orderDetailsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

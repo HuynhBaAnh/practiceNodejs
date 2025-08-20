@@ -1,21 +1,18 @@
 var express = require("express");
 var router = express.Router();
-const yup = require("yup");
 
 // Kết nối đến mongoose model Products
 const products = require("../models/Products");
 
-// Schema validation cho sản phẩm
-const productsSchema = yup.object().shape({
-  name: yup.string().required(),
-  type: yup.string().required(),
-  price: yup.number().required(),
-});
-
+const productsSchema = require("../data/productsShema");
 // Lấy toàn bộ sản phẩm
 router.get("/", async function (req, res, next) {
   try {
-    const productList = await products.find({});
+    const productList = await products
+      .find({})
+      .populate("category")
+      .populate("supplier");
+    console.log(productList);
     if (productList.length === 0) {
       return res.status(404).send("No products found");
     }
@@ -80,6 +77,25 @@ router.patch("/:id", async function (req, res, next) {
       return res.status(404).send("Product not found");
     }
     res.status(200).json(updatedProduct);
+  } catch (error) {
+    res.status(400).send("Error updating product: " + error.message);
+  }
+});
+
+//==> Practice
+//Bài 1:
+router.get("/bai1/:request", async function (req, res, next) {
+  try {
+    const request = req.params.request;
+    let query = { discount: { $lte: request } };
+    const productList = await products
+      .find(query)
+      .populate("categoryId")
+      .populate("supplierId");
+    if (productList.length === 0) {
+      return res.status(404).send("No products found with discount <= 10");
+    }
+    res.status(200).json(productList);
   } catch (error) {
     res.status(400).send("Error updating product: " + error.message);
   }

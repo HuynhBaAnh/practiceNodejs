@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const customerSchema = new Schema({
+const employeeSchema = new Schema({
   firstName: { type: String, required: true, trim: true },
   lastName: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true },
@@ -9,6 +9,5 @@ const customerSchema = new Schema({
   address: { type: String, required: true, trim: true },
   birthday: { type: Date, required: true },
 });
-
-const customers = model("Customer", customerSchema);
-module.exports = customers;
+const employees = model("Employee", employeeSchema);
+module.exports = employees;

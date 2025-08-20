@@ -1,16 +1,8 @@
 var express = require("express");
 var router = express.Router();
+const customersSchema = require("../data/customersSchema");
 
 const customers = require("../models/Customers");
-const yup = require("yup");
-
-// Schema validate dữ liệu đầu vào
-const customersSchema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  phone: yup.string().required(),
-  address: yup.string().required(),
-});
 
 // Lấy danh sách khách hàng
 router.get("/", async function (req, res) {
