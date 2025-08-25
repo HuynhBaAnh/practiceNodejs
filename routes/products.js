@@ -10,9 +10,8 @@ router.get("/", async function (req, res, next) {
   try {
     const productList = await products
       .find({})
-      .populate("category")
-      .populate("supplier");
-    console.log(productList);
+      .populate("categoryId")
+      .populate("supplierId");
     if (productList.length === 0) {
       return res.status(404).send("No products found");
     }
@@ -84,21 +83,77 @@ router.patch("/:id", async function (req, res, next) {
 
 //==> Practice
 //Bài 1:
-router.get("/bai1/:request", async function (req, res, next) {
+router.get("/question1/:request", async function (req, res, next) {
   try {
     const request = req.params.request;
     let query = { discount: { $lte: request } };
-    const productList = await products
+    const foundProductList = await products
       .find(query)
       .populate("categoryId")
       .populate("supplierId");
-    if (productList.length === 0) {
+    if (foundProductList.length === 0) {
       return res.status(404).send("No products found with discount <= 10");
     }
-    res.status(200).json(productList);
+    res.status(200).json(foundProductList);
   } catch (error) {
     res.status(400).send("Error updating product: " + error.message);
   }
 });
+// Finding products with stock < = 5 none detail
+router.get("/question3/:request", async function (req, res, next) {
+  try {
+    const resquest = req.params.request;
+    let query ={ stock: {$lte: resquest}};
+    const foundProductList = await products
+      .find(query)
+    if(foundProductList.length === 0){
+      return res.status(404).send("No products found with stock <= 5");
+    }
+    res.status(200).json(foundProductList);
+  } catch (error) {
+    res.status(400).send("Error updating product: " + error.message);
+  }
+});
+
+// Finding products with stock < = 5
+router.get("/question4/:request", async function (req, res, next) {
+  try {
+    const resquest = req.params.request;
+    let query ={ stock: {$lte: resquest}};
+    const foundProductList = await products
+      .find(query)
+      .populate("categoryId")
+      .populate("supplierId");
+    if(foundProductList.length === 0){
+      return res.status(404).send("No products found with stock <= 5");
+    }
+    res.status(200).json(foundProductList);
+  } catch (error) {
+    res.status(400).send("Error updating product: " + error.message);
+  }
+});
+
+// Finding products with price after discount <= 1000 with detail
+router.get("/question5/:request", async function (req, res, next) {
+  try {
+    const request = req.params.request;
+    
+    const productList = await products
+      .find({})
+      .populate("categoryId")  
+      .populate("supplierId");
+    const filteredProducts = productList.filter( product =>{
+      const priceAfterDiscount = product.price  *(1- product.discount||0)
+      return priceAfterDiscount <= request;
+    })
+    if (filteredProducts.length === 0) {
+      return res.status(404).send("No products found");
+    }
+    res.status(200).json(filteredProducts);
+  } catch (error) {
+    res.status(500).send("Error fetching products: " + error.message);
+  }
+});
+
 
 module.exports = router;

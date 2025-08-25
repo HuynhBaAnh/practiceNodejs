@@ -9,8 +9,8 @@ const orderSchema = new Schema({
   shippingAddress: { type: String, required: true, trim: true },
   shipingCity: { type: String, required: true, trim: true },
   paymentType: { type: String, required: true, trim: true },
-  customer: { type: Schema.Types.ObjectId, ref: "Customer", required: true },
-  employee: { type: Schema.Types.ObjectId, ref: "Employee", required: true },
+  customerId: { type: Schema.Types.ObjectId, ref: "Customer", required: true },
+  employeeId: { type: Schema.Types.ObjectId, ref: "Employee", required: true },
 });
 
 const orders = model("Order", orderSchema);
