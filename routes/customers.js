@@ -49,4 +49,42 @@ router.delete("/:id", async function (req, res) {
   }
 });
 
+
+// Get with address
+router.get("/question6/:request", async function (req, res) {
+  try {
+    const request = req.params.request;
+    const customerList = await customers.find({address: {$eq: request}});
+    if (customerList.length === 0) {
+      return res.status(404).json({ message: "No customers found" });
+    }
+    res.status(200).json(customerList);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching customers: " + error.message });
+  }
+});
+
+//Get with birthday = today
+router.get("/question7", async function (req, res) {
+  try {
+    const day = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const customerList = await customers.find({$expr:{$and:[
+      {$eq:[{$dayOfMonth:"$birthday"}, day]},
+      {$eq:[{$month:"$birthday"}, month]}
+    ]}});
+    if (customerList.length === 0) {
+      return res.status(404).json({ message: "No customers found" });
+    }
+    res.status(200).json(customerList);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching customers: " + error.message });
+  }
+});
+
+
 module.exports = router;

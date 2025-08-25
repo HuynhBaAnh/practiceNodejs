@@ -6,8 +6,13 @@ var logger = require("morgan");
 
 // Connect to mongoose
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/practiceNodejs");
-
+mongoose.connect("mongodb+srv://DevTea:Baanh2003%40@practeicenodejs.tv8iekv.mongodb.net/Practice%29NodeJs?retryWrites=true&w=majority&appName=PracticeNodeJs")
+  .then(() => {
+    console.log("✅ MongoDB Connected Successfully!");
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error:", err);
+  });
 var indexRouter = require("./routes/index");
 var cutomersRouter = require("./routes/customers");
 var productsRouter = require("./routes/products");
